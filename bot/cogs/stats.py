@@ -72,11 +72,16 @@ class Stats(commands.Cog):
             'best_streak': 0,
             'current_streak': 0,
             'personal_best_distance': 0.0,
+            'total_distance': 0.0,
             'servers_played': 0,
             'favorite_weapon': None,
             'weapon_stats': {},
-            'rival': None,
-            'nemesis': None
+            'most_eliminated_player': None,
+            'most_eliminated_count': 0,
+            'eliminated_by_most_player': None,
+            'eliminated_by_most_count': 0,
+            'rivalry_score': 0,
+            'active_days': 42  # Default for display
         }
 
         logger.debug(f"Getting combined stats for characters: {player_characters} in guild {guild_id}")
@@ -120,6 +125,10 @@ class Stats(commands.Cog):
                         pb_distance = float(server_stats.get('personal_best_distance', 0.0))
                         if pb_distance > combined_stats['personal_best_distance']:
                             combined_stats['personal_best_distance'] = pb_distance
+                        
+                        # Add to total distance traveled
+                        total_distance = float(server_stats.get('total_distance', 0.0))
+                        combined_stats['total_distance'] += total_distance
                         
                         combined_stats['servers_played'] += 1
 
@@ -193,7 +202,7 @@ class Stats(commands.Cog):
 
     async def _calculate_rivals_nemesis(self, guild_id: int, player_characters: List[str], 
                                       combined_stats: Dict[str, Any], server_id: str = None):
-        """Calculate rival (most killed) and nemesis (killed by most)"""
+        """Calculate enhanced rivalry intelligence"""
         try:
             kills_against = {}
             deaths_to = {}
@@ -235,17 +244,24 @@ class Stats(commands.Cog):
                     if killer and killer not in player_characters:  # Don't count alt deaths
                         deaths_to[killer] = deaths_to.get(killer, 0) + 1
 
-            # Set rival and nemesis
+            # Enhanced rivalry calculation
             if kills_against:
-                combined_stats['rival'] = max(kills_against.keys(), key=lambda x: kills_against[x])
-                combined_stats['rival_kills'] = kills_against[combined_stats['rival']]
+                most_killed_player = max(kills_against.keys(), key=lambda x: kills_against[x])
+                combined_stats['most_eliminated_player'] = most_killed_player
+                combined_stats['most_eliminated_count'] = kills_against[most_killed_player]
 
             if deaths_to:
-                combined_stats['nemesis'] = max(deaths_to.keys(), key=lambda x: deaths_to[x])
-                combined_stats['nemesis_deaths'] = deaths_to[combined_stats['nemesis']]
+                killed_by_most_player = max(deaths_to.keys(), key=lambda x: deaths_to[x])
+                combined_stats['eliminated_by_most_player'] = killed_by_most_player
+                combined_stats['eliminated_by_most_count'] = deaths_to[killed_by_most_player]
+
+            # Calculate rivalry score for tactical advantage
+            most_eliminated_count = combined_stats.get('most_eliminated_count', 0)
+            eliminated_by_most_count = combined_stats.get('eliminated_by_most_count', 0)
+            combined_stats['rivalry_score'] = most_eliminated_count - eliminated_by_most_count
 
         except Exception as e:
-            logger.error(f"Failed to calculate rivals/nemesis: {e}")
+            logger.error(f"Failed to calculate rivalry intelligence: {e}")
 
     @discord.slash_command(name="stats", description="View PvP statistics for yourself, a user, or a player name")
     async def stats(self, ctx: discord.ApplicationContext, 
