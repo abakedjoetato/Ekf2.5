@@ -798,8 +798,7 @@ class Gambling(commands.Cog):
                 return
 
             # Get balance for bet selection
-            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
-            balance =💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+            wallet = await self.bot.db_EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
@@ -810,8 +809,6 @@ class Gambling(commands.Cog):
             view.current_bet = bet
             view.game_state = game_data
 
-            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
-
             if hasattr(interaction, 'response') and not interaction.response.is_done():
                 await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
             else:
@@ -819,6 +816,10 @@ class Gambling(commands.Cog):
 
         except Exception as e:
             logger.error(f"Slots game start failed: {e}")
+            if hasattr(interaction, 'response') and not interaction.response.is_done():
+                await interaction.response.send_message("❌ Failed to start slots game. Please try again.", ephemeral=True)
+            else:
+                await interaction.followup.send("❌ Failed to start slots game. Please try again.", ephemeral=True)
 
     async def _execute_slots_spin(self, interaction: discord.Interaction, view: UltimateGamblingView):
         """Execute advanced slots spin with AI analysis"""
@@ -1028,7 +1029,7 @@ class Gambling(commands.Cog):
         except Exception as e:
             logger.error(f"Rarity error: {e}")
             return "  U   U   U  "  # Unknown
-    
+
     async def _adjust_bet(self, interaction: discord.Interaction, view: UltimateGamblingView, amount: int):
         """Adjust the current bet amount"""
         try:
@@ -1058,7 +1059,7 @@ class Gambling(commands.Cog):
 
             embed.add_field(
                 name="💎 Payout Multipliers",
-                value="```💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                value="```EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
@@ -1094,7 +1095,7 @@ class Gambling(commands.Cog):
 
             embed.add_field(
                 name="💎 Payout Multipliers",
-                value="```💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                value="```EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
