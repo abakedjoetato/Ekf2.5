@@ -1,4 +1,3 @@
-"""Complete implementation of analytics dashboard with thumbnail and fixes."""
 """
 Emerald's Killfeed - ULTIMATE GAMBLING SYSTEM v7.0 (SUPREMACY EDITION)
 Revolutionary Discord-native casino with Modal Integration, Select Menu Matrix, Button Matrix Systems
@@ -802,9 +801,37 @@ class Gambling(commands.Cog):
             wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
             balance = wallet.get('balance', 0)
 
-            ifEMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
-                inline=False
-            )
+            if balance < 100:
+                await interaction.response.send_message("❌ Minimum balance: $100", ephemeral=True)
+                return
+
+            # Create bet amount selection menu
+            view = discord.ui.View(timeout=600)
+            bet_menu = SelectMenuMatrix.create_bet_amount_menu(balance)
+            view.add_item(bet_menu)
+
+            # Update embed
+            embed_data = {
+                'title': f"🎰 {game_type.title()} - Select Bet Amount",
+                'description': f"💰 **Current Balance:** ${balance:,}\n\nChoose a suggested bet amount or enter a custom amount below.",
+            }
+            if game_type == 'slots':
+                embed_data['description'] += "\n\n💎 **Payout Multipliers:**\n```EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```"
+            elif game_type == 'blackjack':
+                embed_data['description'] += "\n\n🃏 **Blackjack Rules:**\n```Hit, Stand, Double, Surrender```"
+            elif game_type == 'roulette':
+                embed_data['description'] += "\n\n🎯 **Roulette Options:**\n```Numbers (0-36), Red/Black, Even/Odd, Low/High```"
+
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
+
+            if game_type == 'slots':
+                embed.add_field(
+                    name="💎 Payout Multipliers",
+                    value="```EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                    inline=False
+                )
 
             embed.set_footer(text="🚀 Ultimate AI Gaming Engine | Select your bet amount")
 
@@ -820,6 +847,70 @@ class Gambling(commands.Cog):
         except Exception as e:
             logger.error(f"Game selection failed: {e}")
             await interaction.response.send_message("❌ Game selection failed.", ephemeral=True)
+
+    async def _handle_bet_selection(self, interaction: discord.Interaction, bet: int):
+        """Handle bet selection from the main menu"""
+        try:
+            guild_id = interaction.guild.id
+            discord_id = interaction.user.id
+
+            # Get pending game data
+            pending_game = self.pending_games.get(discord_id, {})
+            game_type = pending_game.get('game_type', 'slots')
+
+            # Validate bet amount
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            if bet > balance:
+                await interaction.response.send_message(f"❌ Insufficient funds! You have ${balance:,}", ephemeral=True)
+                return
+
+            # Prepare game data
+            game_data = {
+                'bet': bet,
+                'game_type': game_type,
+                'timestamp': datetime.now(timezone.utc)
+            }
+
+            # Initialize the appropriate game
+            if game_type == "slots":
+                await self._initialize_slots_game(interaction, bet, game_data)
+            elif game_type == "blackjack":
+                await self._initialize_blackjack_game(interaction, bet, game_data)
+            elif game_type == "roulette":
+                await self._initialize_roulette_game(interaction, bet, game_data)
+
+        except Exception as e:
+            logger.error(f"Bet selection failed: {e}")
+            await interaction.response.send_message("❌ Bet selection failed. Please try again.", ephemeral=True)
+
+    async def _initialize_game_from_modal(self, interaction: discord.Interaction, game_type: str, game_data: Dict):
+        """Initialize game from modal submission"""
+        try:
+            guild_id = interaction.guild.id
+            discord_id = interaction.user.id
+            bet = game_data.get('bet', 100)
+
+            # Validate and deduct bet
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            if bet > balance:
+                await interaction.response.send_message(f"❌ Insufficient funds! You have ${balance:,}", ephemeral=True)
+                return
+
+            # Initialize the appropriate game
+            if game_type == "slots":
+                await self._initialize_slots_game(interaction, bet, game_data)
+            elif game_type == "blackjack":
+                await self._initialize_blackjack_game(interaction, bet, game_data)
+            elif game_type == "roulette":
+                await self._initialize_roulette_game(interaction, bet, game_data)
+
+        except Exception as e:
+            logger.error(f"Modal game init failed: {e}")
+            await interaction.response.send_message("❌ Game initialization failed. Please try again.", ephemeral=True)
 
     async def _initialize_slots_game(self, interaction: discord.Interaction, bet: int, game_data: Dict):
         """Initialize slots game"""
