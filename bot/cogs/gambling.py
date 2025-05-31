@@ -1,4 +1,3 @@
-
 """
 Emerald's Killfeed - ULTIMATE GAMBLING SYSTEM v7.0 (SUPREMACY EDITION)
 Revolutionary Discord-native casino with Modal Integration, Select Menu Matrix, Button Matrix Systems
@@ -747,23 +746,24 @@ class Gambling(commands.Cog):
             balance = wallet.get('balance', 0)
 
             if balance < 100:
-                embed = EmbedFactory.build(
-                    title="🎰 ULTIMATE GAMBLING HUB",
-                    description="❌ **Insufficient Funds**\n\nMinimum balance required: $100\n\nUse `/economy daily` to get started!",
-                    color=0xff5e5e,
-                    thumbnail_url="attachment://Gamble.png"
-                )
-                gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
+                embed_data = {
+                    'title': "🎰 ULTIMATE GAMBLING HUB",
+                    'description': "❌ **Insufficient Funds**\n\nMinimum balance required: $100\n\nUse `/economy daily` to get started!"
+                }
+                embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+                embed.color = 0xff5e5e
                 await ctx.respond(embed=embed, file=gamble_file, ephemeral=True)
                 return
 
             # Create main hub embed
-            embed = EmbedFactory.build(
-                title="🎰 ULTIMATE GAMBLING HUB v7.0",
-                description=f"**Welcome to the Supreme Casino Experience**\n\n💰 **Current Balance:** ${balance:,}\n🎲 **Available Games:** Elite Slots, Interactive Blackjack, Physics Roulette\n🤖 **AI Features:** Behavioral Analysis, Personalized Recommendations\n\n*Select a game below to begin your journey to riches...*",
-                color=0x7f5af0,
-                thumbnail_url="attachment://Gamble.png"
-            )
+            embed_data = {
+                'title': "🎰 ULTIMATE GAMBLING HUB v7.0",
+                'description': f"**Welcome to the Supreme Casino Experience**\n\n💰 **Current Balance:** ${balance:,}\n🎲 **Available Games:** Elite Slots, Interactive Blackjack, Physics Roulette\n🤖 **AI Features:** Behavioral Analysis, Personalized Recommendations\n\n*Select a game below to begin your journey to riches...*",
+                
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
 
             embed.add_field(
                 name="🎮 Game Features",
@@ -775,7 +775,7 @@ class Gambling(commands.Cog):
 
             # Create view with game selection
             view = UltimateGamblingView(self, ctx)
-            
+
             gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
             await ctx.respond(embed=embed, file=gamble_file, view=view)
 
@@ -798,97 +798,7 @@ class Gambling(commands.Cog):
                 return
 
             # Get balance for bet selection
-            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
-            balance = wallet.get('balance', 0)
-
-            # Store pending game type
-            self.pending_games[discord_id] = {
-                'game_type': game_type,
-                'timestamp': datetime.now(timezone.utc)
-            }
-
-            # Show bet selection interface
-            embed = EmbedFactory.build(
-                title=f"🎲 {game_type.upper()} - BET SELECTION",
-                description=f"**Current Balance:** ${balance:,}\n\nChoose your bet amount to begin the {game_type} experience.",
-                color=0x8b5cf6,
-                thumbnail_url="attachment://Gamble.png"
-            )
-
-            # Create bet selection view
-            view = discord.ui.View(timeout=300)
-            bet_menu = SelectMenuMatrix.create_bet_amount_menu(balance)
-            view.add_item(bet_menu)
-
-            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
-            await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
-
-        except Exception as e:
-            logger.error(f"Game selection error: {e}")
-            await interaction.response.send_message("❌ Game selection failed. Please try again.", ephemeral=True)
-
-    async def _handle_bet_selection(self, interaction: discord.Interaction, bet: int):
-        """Handle bet amount selection"""
-        try:
-            guild_id = interaction.guild.id
-            discord_id = interaction.user.id
-
-            # Get pending game
-            pending_game = self.pending_games.get(discord_id)
-            if not pending_game:
-                await interaction.response.send_message("❌ No game selected. Please restart.", ephemeral=True)
-                return
-
-            game_type = pending_game['game_type']
-
-            # Validate bet
-            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
-            balance = wallet.get('balance', 0)
-
-            if bet > balance:
-                await interaction.response.send_message(f"❌ Insufficient funds! Balance: ${balance:,}", ephemeral=True)
-                return
-
-            # Initialize game with bet
-            game_data = {'bet': bet}
-            await self._initialize_game_from_modal(interaction, game_type, game_data)
-
-        except Exception as e:
-            logger.error(f"Bet selection error: {e}")
-            await interaction.response.send_message("❌ Bet selection failed. Please try again.", ephemeral=True)
-
-    async def _initialize_game_from_modal(self, interaction: discord.Interaction, game_type: str, game_data: Dict):
-        """Initialize a specific game with the provided data"""
-        try:
-            if game_type == "slots":
-                await self._start_slots_game(interaction, game_data)
-            elif game_type == "blackjack":
-                await self._start_blackjack_game(interaction, game_data)
-            elif game_type == "roulette":
-                await self._start_roulette_game(interaction, game_data)
-
-        except Exception as e:
-            logger.error(f"Game initialization error: {e}")
-            await interaction.response.send_message("❌ Game initialization failed. Please try again.", ephemeral=True)
-
-    async def _start_slots_game(self, interaction: discord.Interaction, game_data: Dict):
-        """Start an advanced slots game"""
-        try:
-            bet = game_data['bet']
-            guild_id = interaction.guild.id
-            discord_id = interaction.user.id
-
-            # Create slots embed
-            embed = EmbedFactory.build(
-                title="🎰 ULTIMATE SLOTS - AI ANALYSIS READY",
-                description=f"**Bet Amount:** ${bet:,}\n\n**AI-Enhanced Slot Machine**\nPowered by quantum algorithms and behavioral analysis\n\n🎲 **Click SPIN REELS to begin**",
-                color=0x8b5cf6,
-                thumbnail_url="attachment://Gamble.png"
-            )
-
-            embed.add_field(
-                name="🏆 Payout Structure",
-                value="```💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
@@ -900,7 +810,7 @@ class Gambling(commands.Cog):
             view.game_state = game_data
 
             gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
-            
+
             if hasattr(interaction, 'response') and not interaction.response.is_done():
                 await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
             else:
@@ -934,12 +844,13 @@ class Gambling(commands.Cog):
                 progress = (i + 1) / len(animation_frames)
                 progress_bar = "█" * int(progress * 12) + "░" * int((1 - progress) * 12)
 
-                embed = EmbedFactory.build(
-                    title="🎰 ULTIMATE SLOTS - AI ANALYSIS",
-                    description=f"**Bet:** ${bet:,}\n\n{description}\n\n⚡ **AI Processing...** ⚡",
-                    color=color,
-                    thumbnail_url="attachment://Gamble.png"
-                )
+                embed_data = {
+                    'title': "🎰 ULTIMATE SLOTS - AI ANALYSIS",
+                    'description': f"**Bet:** ${bet:,}\n\n{description}\n\n⚡ **AI Processing...** ⚡"
+                }
+                embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+                embed.color = color
+                embed.set_thumbnail(url="attachment://Gamble.png")
 
                 embed.add_field(
                     name="🤖 Analysis Progress",
@@ -984,210 +895,17 @@ class Gambling(commands.Cog):
             if any(symbol == '💎' for symbol in reels) and len(set(reels)) == 1:
                 embed_color = 0xd946ef  # Mythic purple
 
-            embed = EmbedFactory.build(
-                title="🎰 ULTIMATE SLOTS - AI ANALYSIS COMPLETE",
-                color=embed_color,
-                thumbnail_url="attachment://Gamble.png"
-            )
+            embed_data = {
+                'title': "🎰 ULTIMATE SLOTS - AI ANALYSIS COMPLETE"
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = embed_color
+            embed.set_thumbnail(url="attachment://Gamble.png")
 
             # Enhanced reel display with rarity indicators
             reel_display = f"║ {'  │  '.join(reels)} ║"
             rarity_line = self._get_reel_rarity_display(reels)
-            
+
             embed.add_field(
                 name="🎲 Final AI-Enhanced Reels",
-                value=f"```{reel_display}\n{rarity_line}```",
-                inline=False
-            )
-
-            # Result analysis
-            result_emoji = "🎊" if winnings > bet * 10 else "✅" if winnings > 0 else "💸"
-            
-            embed.add_field(
-                name=f"{result_emoji} Spin Results",
-                value=f"**Bet:** ${bet:,}\n**Winnings:** ${winnings:,}\n**Net Result:** {'+' if net_result >= 0 else ''}${net_result:,}\n**Multiplier:** {multiplier:.1f}x",
-                inline=True
-            )
-
-            embed.add_field(
-                name="💰 Wallet Update",
-                value=f"**New Balance:** ${updated_wallet.get('balance', 0):,}",
-                inline=True
-            )
-
-            # AI contextual message
-            if win_type == "mythic":
-                message = random.choice(self.contextual_messages['slots']['mythic_win'])
-            elif winnings > bet * 5:
-                message = random.choice(self.contextual_messages['slots']['big_win'])
-            elif winnings > 0:
-                message = random.choice(self.contextual_messages['slots']['regular_win'])
-            else:
-                message = random.choice(self.contextual_messages['slots']['loss'])
-
-            embed.add_field(
-                name="🤖 AI Analysis",
-                value=f"*{message}*",
-                inline=False
-            )
-
-            # Create play again view
-            play_again_view = discord.ui.View(timeout=300)
-            
-            play_again_btn = discord.ui.Button(
-                label="🎰 SPIN AGAIN",
-                style=discord.ButtonStyle.success,
-                emoji="🔄"
-            )
-            
-            async def play_again_callback(btn_interaction):
-                if btn_interaction.user.id != discord_id:
-                    await btn_interaction.response.send_message("❌ This is not your game session!", ephemeral=True)
-                    return
-                    
-                # Check balance for next spin
-                current_wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
-                if current_wallet.get('balance', 0) < bet:
-                    await btn_interaction.response.send_message("❌ Insufficient funds for another spin!", ephemeral=True)
-                    return
-                    
-                # Restart slots game
-                await self._execute_slots_spin(btn_interaction, view)
-            
-            play_again_btn.callback = play_again_callback
-            play_again_view.add_item(play_again_btn)
-
-            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
-            await interaction.edit_original_response(embed=embed, file=gamble_file, view=play_again_view)
-
-        except Exception as e:
-            logger.error(f"Slots execution error: {e}")
-            embed = EmbedFactory.build(
-                title="🎰 SLOTS ERROR",
-                description="❌ Game execution failed. Please try again.",
-                color=0xff5e5e,
-                thumbnail_url="attachment://Gamble.png"
-            )
-            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
-            await interaction.edit_original_response(embed=embed, file=gamble_file, view=None)
-
-    def _generate_ai_enhanced_reels(self, user_id: str) -> List[str]:
-        """Generate AI-enhanced slot reels based on player behavior"""
-        symbols = list(self.slot_symbols.keys())
-        weights = [self.slot_symbols[symbol]['weight'] for symbol in symbols]
-        
-        # AI enhancement: slightly adjust probabilities based on player history
-        if user_id in self.ai_engine.player_profiles:
-            profile = self.ai_engine.player_profiles[user_id]
-            recent_losses = len([g for g in profile['game_history'][-5:] if g.get('net_result', 0) < 0])
-            
-            # Small consolation boost after consecutive losses
-            if recent_losses >= 3:
-                # Slightly improve odds for better symbols
-                for i, symbol in enumerate(symbols):
-                    if self.slot_symbols[symbol]['value'] >= 15:
-                        weights[i] = int(weights[i] * 0.9)  # Reduce weight = increase chance
-        
-        # Generate 3 reels
-        reels = []
-        for _ in range(3):
-            reel = random.choices(symbols, weights=weights, k=1)[0]
-            reels.append(reel)
-        
-        return reels
-
-    def _calculate_ai_slots_payout(self, reels: List[str], bet: int, user_id: str) -> Tuple[int, str, float]:
-        """Calculate payout with AI enhancements"""
-        # Check for exact matches
-        if len(set(reels)) == 1:  # All three match
-            symbol = reels[0]
-            base_multiplier = self.slot_symbols[symbol]['value']
-            win_type = self.slot_symbols[symbol]['rarity'].lower()
-            
-            # AI enhancement: small bonus for loyal players
-            if user_id in self.ai_engine.player_profiles:
-                profile = self.ai_engine.player_profiles[user_id]
-                if profile['total_games'] >= 20:
-                    base_multiplier *= 1.1  # 10% loyalty bonus
-            
-            return int(bet * base_multiplier), win_type, base_multiplier
-        
-        # Check for pairs
-        symbol_counts = {}
-        for symbol in reels:
-            symbol_counts[symbol] = symbol_counts.get(symbol, 0) + 1
-        
-        pairs = [symbol for symbol, count in symbol_counts.items() if count >= 2]
-        if pairs:
-            best_pair = max(pairs, key=lambda s: self.slot_symbols[s]['value'])
-            multiplier = self.slot_symbols[best_pair]['value'] * 0.3  # 30% of full value for pairs
-            return int(bet * multiplier), "pair", multiplier
-        
-        # Near miss detection - AI consolation
-        unique_symbols = list(set(reels))
-        if len(unique_symbols) == 2:  # Two different symbols
-            best_symbol = max(unique_symbols, key=lambda s: self.slot_symbols[s]['value'])
-            if self.slot_symbols[best_symbol]['value'] >= 25:  # High value near miss
-                consolation = bet * 0.1  # 10% consolation
-                return int(consolation), "near_miss", 0.1
-        
-        return 0, "loss", 0
-
-    def _get_reel_rarity_display(self, reels: List[str]) -> str:
-        """Generate rarity display line for reels"""
-        rarity_colors = {
-            'MYTHIC': '🟣', 'LEGENDARY': '🟠', 'EPIC': '🔴',
-            'RARE': '🟢', 'UNCOMMON': '🔵', 'COMMON': '⚫', 'BASIC': '⚪'
-        }
-        
-        rarity_line = []
-        for symbol in reels:
-            rarity = self.slot_symbols[symbol]['rarity']
-            color = rarity_colors.get(rarity, '⚪')
-            rarity_line.append(f"{color}{rarity}")
-        
-        return "  ".join(rarity_line)
-
-    # Placeholder methods for other missing functionality
-    async def _start_blackjack_game(self, interaction: discord.Interaction, game_data: Dict):
-        """Start blackjack game - placeholder"""
-        await interaction.response.send_message("🃏 Blackjack coming soon!", ephemeral=True)
-
-    async def _start_roulette_game(self, interaction: discord.Interaction, game_data: Dict):
-        """Start roulette game - placeholder"""
-        await interaction.response.send_message("🎯 Roulette coming soon!", ephemeral=True)
-
-    async def _show_analytics_dashboard(self, interaction: discord.Interaction):
-        """Show AI analytics dashboard"""
-        await interaction.response.send_message("📊 Analytics dashboard coming soon!", ephemeral=True)
-
-    async def _adjust_bet(self, interaction: discord.Interaction, view: UltimateGamblingView, adjustment: int):
-        """Adjust bet amount"""
-        await interaction.response.send_message("⚙️ Bet adjustment coming soon!", ephemeral=True)
-
-    async def _set_max_bet(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Set maximum bet"""
-        await interaction.response.send_message("💎 Max bet coming soon!", ephemeral=True)
-
-    async def _blackjack_hit(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Blackjack hit action"""
-        await interaction.response.send_message("🃏 Hit coming soon!", ephemeral=True)
-
-    async def _blackjack_stand(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Blackjack stand action"""
-        await interaction.response.send_message("🛡️ Stand coming soon!", ephemeral=True)
-
-    async def _blackjack_double(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Blackjack double action"""
-        await interaction.response.send_message("💰 Double coming soon!", ephemeral=True)
-
-    async def _blackjack_surrender(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Blackjack surrender action"""
-        await interaction.response.send_message("🏳️ Surrender coming soon!", ephemeral=True)
-
-    async def _execute_roulette_spin(self, interaction: discord.Interaction, view: UltimateGamblingView):
-        """Execute roulette spin"""
-        await interaction.response.send_message("🎯 Roulette spin coming soon!", ephemeral=True)
-
-def setup(bot):
-    bot.add_cog(Gambling(bot))
+                value=f"```{reel_display}\n{rarity_line}
