@@ -108,16 +108,16 @@ class EmbedFactory:
 
     # Gritty survivalist kill messages
     KILL_MESSAGES = [
-        "> Another heartbeat silenced beneath the ash sky.",
-        "> No burial, no name — just silence where a soul once stood.",
-        "> Left no echo. Just scattered gear and cooling blood.",
-        "> Cut from the world like thread from a fraying coat.",
-        "> Hunger, cold, bullets — it could've been any of them. It was enough.",
-        "> Marked, hunted, forgotten. In that order.",
-        "> Their fire went out before they even knew they were burning.",
-        "> A last breath swallowed by wind and war.",
-        "> The price of survival paid in someone else's blood.",
-        "> The map didn't change. The player did."
+        "Another heartbeat silenced beneath the ash sky",
+        "No burial, no name — just silence where a soul once stood",
+        "Left no echo. Just scattered gear and cooling blood",
+        "Cut from the world like thread from a fraying coat",
+        "Hunger, cold, bullets — it could've been any of them. It was enough",
+        "Marked, hunted, forgotten. In that order",
+        "Their fire went out before they even knew they were burning",
+        "A last breath swallowed by wind and war",
+        "The price of survival paid in someone else's blood",
+        "The map didn't change. The player did"
     ]
 
     SUICIDE_TITLES = [
@@ -135,16 +135,16 @@ class EmbedFactory:
 
     # Deadpan dark humor suicide messages
     SUICIDE_MESSAGES = [
-        "> Hit \"relocate\" like it was the snooze button. Got deleted.",
-        "> Tactical redeployment... into the abyss.",
-        "> Rage respawned and logic respawned with it.",
-        "> Wanted a reset. Got a reboot straight to the void.",
-        "> Pressed something. Paid everything.",
-        "> Who needs enemies when you've got bad decisions?",
-        "> Alt+F4'd themselves into Valhalla.",
-        "> Strategic death — poorly executed.",
-        "> Fast travel without a destination.",
-        "> Confirmed: the dead menu is not a safe zone."
+        "Hit relocate like it was the snooze button. Got deleted",
+        "Tactical redeployment... into the abyss",
+        "Rage respawned and logic respawned with it",
+        "Wanted a reset. Got a reboot straight to the void",
+        "Pressed something. Paid everything",
+        "Who needs enemies when you've got bad decisions?",
+        "Alt+F4'd themselves into Valhalla",
+        "Strategic death — poorly executed",
+        "Fast travel without a destination",
+        "Confirmed: the dead menu is not a safe zone"
     ]
 
     # Enhanced falling death titles - no emojis
@@ -163,16 +163,16 @@ class EmbedFactory:
 
     # Sardonic falling messages
     FALLING_MESSAGES = [
-        "> Thought they could make it. The ground disagreed.",
-        "> Airborne ambition. Terminal results.",
-        "> Tried flying. Landed poorly.",
-        "> Gravity called. They answered — headfirst.",
-        "> Believed in themselves. Gravity didn't.",
-        "> From rooftops to regret in under two seconds.",
-        "> The sky opened. The floor closed.",
-        "> Survival instincts took a coffee break.",
-        "> Feet first into a bad decision.",
-        "> Their plan had one fatal step too many."
+        "Thought they could make it. The ground disagreed",
+        "Airborne ambition. Terminal results",
+        "Tried flying. Landed poorly",
+        "Gravity called. They answered — headfirst",
+        "Believed in themselves. Gravity didn't",
+        "From rooftops to regret in under two seconds",
+        "The sky opened. The floor closed",
+        "Survival instincts took a coffee break",
+        "Feet first into a bad decision",
+        "Their plan had one fatal step too many"
     ]
 
     # Enhanced airdrop titles - no emojis
@@ -320,7 +320,7 @@ class EmbedFactory:
 
     @staticmethod
     async def build_connection_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite connection embed with enhanced visuals - NO CODE BLOCKS"""
+        """Build elite connection embed - MINIMALISTIC 3 FIELDS"""
         try:
             title = embed_data.get('title', random.choice(EmbedFactory.CONNECTION_TITLES))
             description = embed_data.get('description', random.choice(EmbedFactory.CONNECTION_DESCRIPTIONS))
@@ -336,24 +336,12 @@ class EmbedFactory:
             platform = embed_data.get('platform', 'Unknown')
             server_name = embed_data.get('server_name', 'Unknown Server')
 
-            # Clean professional styling - NO CODE BLOCKS
-            embed.add_field(name="**OPERATIVE**", value=f"**{player_name}**", inline=True)
-            embed.add_field(name="**PLATFORM**", value=f"*{platform}*", inline=True)
-            embed.add_field(name="**DEPLOYMENT ZONE**", value=f"**{server_name}**", inline=True)
-
-            # Enhanced operational status
-            embed.add_field(name="**STATUS**", value="**ACTIVE** • *Ready for Combat*", inline=True)
-            embed.add_field(name="**CLEARANCE**", value="**AUTHORIZED** • *Full Access*", inline=True)
-            embed.add_field(name="**PRIORITY**", value="**HIGH** • *Combat Ready*", inline=True)
-
-            # Enhanced intelligence briefing
-            embed.add_field(name="**OPERATIONAL INTELLIGENCE**", 
-                          value="Elite combatant has successfully completed deployment protocols and is now fully operational within the designated theater of operations.", 
-                          inline=False)
+            embed.add_field(name="**OPERATIVE**", value=f"**{player_name}**\n**{platform}** • **{server_name}**", inline=False)
+            embed.add_field(name="**STATUS**", value="**ACTIVE** • Ready for Combat", inline=True)
+            embed.add_field(name="**OPERATIONAL INTELLIGENCE**", value="Elite combatant successfully deployed and operational", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
-            # Create file attachment
             connections_file = discord.File("./assets/Connections.png", filename="Connections.png")
             embed.set_thumbnail(url="attachment://Connections.png")
 
@@ -361,39 +349,26 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Error building connection embed: {e}")
-            import traceback
-            logger.error(f"Connection embed traceback: {traceback.format_exc()}")
             return await EmbedFactory.build_error_embed("Connection embed error")
 
     @staticmethod
     async def build_mission_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite mission embed with enhanced visuals - NO CODE BLOCKS"""
+        """Build elite mission embed - MINIMALISTIC 3 FIELDS"""
         try:
             mission_id = embed_data.get('mission_id', '')
             state = embed_data.get('state', 'UNKNOWN')
             level = embed_data.get('level', 1)
 
-            # Enhanced state-specific styling
             if state == 'READY':
                 title = random.choice(EmbedFactory.MISSION_READY_TITLES)
                 description = random.choice(EmbedFactory.MISSION_READY_DESCRIPTIONS)
                 color = EmbedFactory.COLORS['mission']
-                status_display = "**READY** • *Awaiting Deployment*"
-            elif state == 'IN_PROGRESS':
-                title = "**OPERATION IN PROGRESS**"
-                description = "**ACTIVE ENGAGEMENT** • Elite operatives are currently executing the mission"
-                color = 0xFF8C00  # Dark orange for active
-                status_display = "**ACTIVE** • *In Progress*"
-            elif state == 'COMPLETED':
-                title = "**MISSION ACCOMPLISHED**"
-                description = "**OPERATION SUCCESS** • All objectives secured with extreme prejudice"
-                color = EmbedFactory.COLORS['success']
-                status_display = "**COMPLETED** • *Success*"
+                status_display = "**READY** • Awaiting Deployment"
             else:
                 title = "**MISSION STATUS UPDATE**"
                 description = "**TACTICAL SITUATION EVOLVING** • Stand by for further orders"
                 color = EmbedFactory.COLORS['info']
-                status_display = "**UNKNOWN** • *Updating*"
+                status_display = f"**{state}** • Updating"
 
             embed = discord.Embed(
                 title=title,
@@ -402,43 +377,17 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            # Enhanced mission details - NO CODE BLOCKS
             mission_name = EmbedFactory.normalize_mission_name(mission_id)
             threat_display = EmbedFactory.get_threat_level_display(level)
 
-            embed.add_field(name="**TARGET DESIGNATION**", 
-                          value=f"**{mission_name}**", inline=False)
+            embed.add_field(name="**TARGET DESIGNATION**", value=f"**{mission_name}**\n{threat_display}", inline=False)
+            embed.add_field(name="**STATUS**", value=status_display, inline=True)
 
-            embed.add_field(name="**THREAT ASSESSMENT**", 
-                          value=threat_display, inline=True)
-
-            embed.add_field(name="**OPERATION STATUS**", 
-                          value=status_display, inline=True)
-
-            # Add mission class indicator
-            class_indicators = {
-                1: "**STANDARD** *Class*",
-                2: "**ADVANCED** *Class*", 
-                3: "**ELITE** *Class*",
-                4: "**LEGENDARY** *Class*"
-            }
-            embed.add_field(name="**MISSION CLASS**", 
-                          value=class_indicators.get(level, "**UNKNOWN** *Class*"), inline=True)
-
-            # Enhanced deployment metrics
-            embed.add_field(name="**DIFFICULTY TIER**", value=f"**Level {level}**", inline=True)
-            embed.add_field(name="**ENGAGEMENT TYPE**", value="**Direct Combat**", inline=True)
-            embed.add_field(name="**EXPECTED DURATION**", value="**Variable**", inline=True)
-
-            # Add call to action
             if state == 'READY':
-                embed.add_field(name="**DEPLOYMENT ORDERS**", 
-                              value="**Deploy immediately** • High-value rewards await brave operatives. Mission parameters are locked and loaded for immediate execution.", 
-                              inline=False)
+                embed.add_field(name="**DEPLOYMENT ORDERS**", value="Deploy immediately • High-value rewards await brave operatives", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
-            # Create file attachment
             mission_file = discord.File("./assets/Mission.png", filename="Mission.png")
             embed.set_thumbnail(url="attachment://Mission.png")
 
@@ -446,16 +395,14 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Error building mission embed: {e}")
-            import traceback
-            logger.error(f"Mission embed traceback: {traceback.format_exc()}")
             return await EmbedFactory.build_error_embed("Mission embed error")
 
     @staticmethod
     async def build_airdrop_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite airdrop embed with enhanced visuals - NO CODE BLOCKS"""
+        """Build elite airdrop embed - MINIMALISTIC 3 FIELDS"""
         try:
             title = random.choice(EmbedFactory.AIRDROP_TITLES)
-            description = "**TACTICAL SUPPLY DROP DETECTED** • High-value military assets incoming"
+            description = "**High-value military assets incoming**"
 
             embed = discord.Embed(
                 title=title,
@@ -464,26 +411,11 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            location = embed_data.get('location', 'Classified Location')
-
-            # Professional military briefing format - NO CODE BLOCKS
-            embed.add_field(name="**DROP ZONE**", value=f"**{location}**", inline=True)
-            embed.add_field(name="**CARGO STATUS**", value="**INBOUND** • *Confirmed*", inline=True)
-            embed.add_field(name="**ASSET CLASS**", value="**LEGENDARY TIER**", inline=True)
-
-            # Advanced logistics information
-            embed.add_field(name="**DELIVERY METHOD**", value="**Airdrop** • *Parachute Deploy*", inline=True)
-            embed.add_field(name="**SECURITY LEVEL**", value="**HIGH VALUE** • *Protected*", inline=True)
-            embed.add_field(name="**ACQUISITION WINDOW**", value="**Limited Time** • *Act Fast*", inline=True)
-
-            # Enhanced tactical information
-            embed.add_field(name="**TACTICAL INTELLIGENCE**", 
-                          value="High competition expected from hostile operatives. Recommend immediate deployment with full combat loadout. Supply drop contains premium military equipment and tactical resources.", 
-                          inline=False)
+            embed.add_field(name="**LEGENDARY TIER**", value="Premium equipment and tactical resources", inline=False)
+            embed.add_field(name="**INBOUND** • Limited Time", value="High competition expected from hostile operatives", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
-            # Create file attachment
             airdrop_file = discord.File("./assets/Airdrop.png", filename="Airdrop.png")
             embed.set_thumbnail(url="attachment://Airdrop.png")
 
@@ -495,10 +427,10 @@ class EmbedFactory:
 
     @staticmethod
     async def build_helicrash_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite helicrash embed with enhanced visuals - NO CODE BLOCKS"""
+        """Build elite helicrash embed - MINIMALISTIC 3 FIELDS"""
         try:
             title = random.choice(EmbedFactory.HELICRASH_TITLES)
-            description = "**AVIATION ASSET COMPROMISED** • Salvage opportunity in hostile territory"
+            description = "**Salvage opportunity in hostile territory**"
 
             embed = discord.Embed(
                 title=title,
@@ -507,26 +439,11 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            location = embed_data.get('location', 'Classified Coordinates')
-
-            # Military crash site analysis - NO CODE BLOCKS
-            embed.add_field(name="**CRASH COORDINATES**", value=f"**{location}**", inline=True)
-            embed.add_field(name="**RECOVERY STATUS**", value="**SITE LOCATED** • *Active*", inline=True)
-            embed.add_field(name="**ASSET CLASS**", value="**MILITARY GRADE**", inline=True)
-
-            # Enhanced crash site intelligence
-            embed.add_field(name="**INCIDENT TYPE**", value="**Aviation Failure** • *Mechanical*", inline=True)
-            embed.add_field(name="**SALVAGE PRIORITY**", value="**HIGH VALUE** • *Immediate*", inline=True)
-            embed.add_field(name="**THREAT ASSESSMENT**", value="**HOSTILE ZONE** • *Dangerous*", inline=True)
-
-            # Comprehensive tactical warning
-            embed.add_field(name="**OPERATIONAL WARNING**", 
-                          value="Hot zone active with confirmed hostile presence. Approach with maximum caution and full combat readiness. Site contains high-value military equipment but enemy contact is probable.", 
-                          inline=False)
+            embed.add_field(name="**MILITARY GRADE**", value="High-value military equipment available", inline=False)
+            embed.add_field(name="**SITE LOCATED** • Dangerous", value="Hot zone active with confirmed hostile presence", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
-            # Create file attachment
             helicrash_file = discord.File("./assets/Helicrash.png", filename="Helicrash.png")
             embed.set_thumbnail(url="attachment://Helicrash.png")
 
@@ -538,10 +455,10 @@ class EmbedFactory:
 
     @staticmethod
     async def build_trader_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite trader embed with enhanced visuals - NO CODE BLOCKS"""
+        """Build elite trader embed - MINIMALISTIC 3 FIELDS"""
         try:
             title = random.choice(EmbedFactory.TRADER_TITLES)
-            description = "**BLACK MARKET CONTACT ESTABLISHED** • Rare commodities available for trade"
+            description = "**Rare commodities available for trade**"
 
             embed = discord.Embed(
                 title=title,
@@ -550,26 +467,11 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            location = embed_data.get('location', 'Secure Location')
-
-            # Professional trading intelligence - NO CODE BLOCKS
-            embed.add_field(name="**CONTACT LOCATION**", value=f"**{location}**", inline=True)
-            embed.add_field(name="**NETWORK STATUS**", value="**ACTIVE** • *Online*", inline=True)
-            embed.add_field(name="**INVENTORY TIER**", value="**ROYAL GRADE**", inline=True)
-
-            # Enhanced trading metrics
-            embed.add_field(name="**TRADING STATUS**", value="**Open for Business** • *Available*", inline=True)
-            embed.add_field(name="**PAYMENT METHODS**", value="**All Currencies** • *Accepted*", inline=True)
-            embed.add_field(name="**STOCK LEVEL**", value="**Premium Items** • *Full Inventory*", inline=True)
-
-            # Professional trade information
-            embed.add_field(name="**TRADING INTELLIGENCE**", 
-                          value="Premium equipment and rare commodities now available through secure channels. Trader verified and trusted within the network. Bring your best currency for exclusive deals on high-tier military equipment.", 
-                          inline=False)
+            embed.add_field(name="**ROYAL GRADE**", value="Premium equipment and rare commodities", inline=False)
+            embed.add_field(name="**ACTIVE** • Open for Business", value="Verified trader with exclusive deals on high-tier equipment", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
-            # Create file attachment
             trader_file = discord.File("./assets/Trader.png", filename="Trader.png")
             embed.set_thumbnail(url="attachment://Trader.png")
 
@@ -581,30 +483,33 @@ class EmbedFactory:
 
     @staticmethod
     async def build_killfeed_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build elite killfeed embed with advanced analytics and 10/10 visuals - NO CODE BLOCKS"""
+        """Build elite killfeed embed - SEPARATE FALLING AND SUICIDE - MINIMALISTIC 4 FIELDS MAX"""
         try:
             is_suicide = embed_data.get('is_suicide', False)
             weapon = embed_data.get('weapon', 'Unknown')
             distance = embed_data.get('distance', 0)
 
             if is_suicide:
-                # Enhanced suicide embed styling - NO CODE BLOCKS
                 player_name = embed_data.get('player_name') or embed_data.get('victim', 'Unknown Player')
 
                 if weapon.lower() == 'falling':
+                    # FALLING EMBED - SEPARATE
                     title = random.choice(EmbedFactory.FALLING_TITLES)
                     color = EmbedFactory.COLORS['falling']
                     themed_description = random.choice(EmbedFactory.FALLING_MESSAGES)
                     asset_file = discord.File("./assets/Falling.png", filename="Falling.png")
                     thumbnail_url = "attachment://Falling.png"
-                    status_display = "**KIA - FALLING** • *Non-Combat Loss*"
+                    cause_display = "**Falling** • Physics Lesson"
+                    status_display = "**KIA - FALLING**"
                 else:
+                    # SUICIDE EMBED - SEPARATE
                     title = random.choice(EmbedFactory.SUICIDE_TITLES)
                     color = EmbedFactory.COLORS['suicide']
                     themed_description = random.choice(EmbedFactory.SUICIDE_MESSAGES)
                     asset_file = discord.File("./assets/Suicide.png", filename="Suicide.png")
                     thumbnail_url = "attachment://Suicide.png"
-                    status_display = "**KIA - INTERNAL** • *System Failure*"
+                    cause_display = "**Menu Suicide** • Non-Combat Loss"
+                    status_display = "**KIA - INTERNAL**"
 
                 embed = discord.Embed(
                     title=title,
@@ -612,69 +517,19 @@ class EmbedFactory:
                     timestamp=datetime.now(timezone.utc)
                 )
 
-                # Professional incident report - NO CODE BLOCKS
                 embed.add_field(name="**OPERATIVE**", value=f"**{player_name}**", inline=True)
-                embed.add_field(name="**CAUSE OF DEATH**", value=f"*{weapon}*", inline=True)
-                embed.add_field(name="**STATUS**", value=status_display, inline=True)
-
-                # Enhanced incident analysis
-                embed.add_field(name="**INCIDENT TYPE**", value="**Non-Combat Loss** • *Internal*", inline=True)
-                embed.add_field(name="**THREAT LEVEL**", value="**Self-Inflicted** • *No Enemy*", inline=True)
-                embed.add_field(name="**RESPONSE STATUS**", value="**Documented** • *Recorded*", inline=True)
-
-                # Enhanced mission report
+                embed.add_field(name=status_display, value=cause_display, inline=True)
                 embed.add_field(name="**INCIDENT REPORT**", value=themed_description, inline=False)
 
                 embed.set_thumbnail(url=thumbnail_url)
 
             else:
-                # Enhanced PvP kill embed with advanced analytics - NO CODE BLOCKS
+                # PVP KILL EMBED
                 killer = embed_data.get('killer', 'Unknown')
                 victim = embed_data.get('victim', 'Unknown')
                 killer_kdr = embed_data.get('killer_kdr', '0.00')
                 victim_kdr = embed_data.get('victim_kdr', '0.00')
                 title = random.choice(EmbedFactory.KILL_TITLES)
-
-                # Advanced analytics calculations
-                try:
-                    killer_kdr_float = float(killer_kdr)
-                    victim_kdr_float = float(victim_kdr)
-
-                    # Performance tier calculation
-                    def get_performance_tier(kdr):
-                        if kdr >= 3.0:
-                            return "**LEGENDARY** *Tier*"
-                        elif kdr >= 2.0:
-                            return "**ELITE** *Tier*"
-                        elif kdr >= 1.5:
-                            return "**VETERAN** *Tier*"
-                        elif kdr >= 1.0:
-                            return "**SKILLED** *Tier*"
-                        else:
-                            return "**ROOKIE** *Tier*"
-
-                    killer_tier = get_performance_tier(killer_kdr_float)
-                    victim_tier = get_performance_tier(victim_kdr_float)
-
-                    # Engagement analysis
-                    if distance > 500:
-                        range_class = "**LONG RANGE** • *Sniper Elite*"
-                        range_type = "**Precision Engagement**"
-                    elif distance > 200:
-                        range_class = "**MEDIUM RANGE** • *Tactical Combat*"
-                        range_type = "**Standard Engagement**"
-                    elif distance > 50:
-                        range_class = "**CLOSE RANGE** • *Intense Combat*"
-                        range_type = "**Close Quarters**"
-                    else:
-                        range_class = "**POINT BLANK** • *Execution Style*"
-                        range_type = "**Direct Contact**"
-
-                except:
-                    killer_tier = "**ROOKIE** *Tier*"
-                    victim_tier = "**ROOKIE** *Tier*"
-                    range_class = "**STANDARD** • *Engagement*"
-                    range_type = "**Combat Encounter**"
 
                 embed = discord.Embed(
                     title=title,
@@ -682,34 +537,10 @@ class EmbedFactory:
                     timestamp=datetime.now(timezone.utc)
                 )
 
-                # Enhanced combat participants - NO CODE BLOCKS
-                embed.add_field(name="**ELIMINATOR**", 
-                              value=f"**{killer}**\n{killer_tier} • **{killer_kdr}** *KDR*", 
-                              inline=True)
+                embed.add_field(name="**ELIMINATOR**", value=f"**{killer}** • **{killer_kdr}** KDR", inline=True)
+                embed.add_field(name="**ELIMINATED**", value=f"**{victim}** • **{victim_kdr}** KDR", inline=True)
+                embed.add_field(name="**WEAPON SYSTEM**", value=f"**{weapon}** • **{distance:.1f}m**", inline=True)
 
-                embed.add_field(name="**ELIMINATED**", 
-                              value=f"**{victim}**\n{victim_tier} • **{victim_kdr}** *KDR*", 
-                              inline=True)
-
-                embed.add_field(name="**WEAPON SYSTEM**", 
-                              value=f"**{weapon}**", 
-                              inline=True)
-
-                # Advanced engagement analytics
-                if distance > 0:
-                    embed.add_field(name="**ENGAGEMENT RANGE**", 
-                                  value=f"**{distance:.1f}m**\n{range_class}", 
-                                  inline=True)
-
-                    embed.add_field(name="**ENGAGEMENT TYPE**", 
-                                  value=range_type, 
-                                  inline=True)
-
-                # Combat analysis with simplified logic
-                embed.add_field(name="**COMBAT ANALYSIS**", 
-                              value="**ENGAGEMENT** • *Combat Complete*", inline=True)
-
-                # Enhanced combat report with random message
                 kill_message = random.choice(EmbedFactory.KILL_MESSAGES)
                 embed.add_field(name="**COMBAT REPORT**", value=kill_message, inline=False)
 
@@ -726,7 +557,7 @@ class EmbedFactory:
 
     @staticmethod
     async def build_leaderboard_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced leaderboard embed with 10/10 visuals - NO CODE BLOCKS"""
+        """Build enhanced leaderboard embed - MINIMALISTIC 3 FIELDS"""
         try:
             title = embed_data.get('title', "**ELITE COMBAT RANKINGS**")
             description = embed_data.get('description', '**Champions ranked by battlefield supremacy**')
@@ -738,35 +569,14 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            # Enhanced rankings display - NO CODE BLOCKS
             rankings = embed_data.get('rankings', '')
             if rankings:
-                embed.add_field(name="**HALL OF LEGENDS**", value=rankings, inline=False)
+                embed.add_field(name="**TOP WARRIORS**", value=rankings, inline=False)
 
-            # Enhanced statistics - NO CODE BLOCKS
-            total_kills = embed_data.get('total_kills', 0)
-            total_deaths = embed_data.get('total_deaths', 0)
-            stat_type = embed_data.get('stat_type', 'general')
-
-            if total_kills > 0 or total_deaths > 0:
-                if stat_type == 'kills':
-                    embed.add_field(name="**TOTAL ELIMINATIONS**", value=f"**{total_kills:,}**", inline=True)
-                elif stat_type == 'deaths':
-                    embed.add_field(name="**TOTAL CASUALTIES**", value=f"**{total_deaths:,}**", inline=True)
-                elif stat_type == 'kdr':
-                    total_kdr = total_kills / max(total_deaths, 1) if total_deaths > 0 else total_kills
-                    embed.add_field(name="**AVERAGE EFFICIENCY**", value=f"**{total_kdr:.2f}**", inline=True)
-
-            # Server context - NO CODE BLOCKS
             server_name = embed_data.get('server_name', 'All Servers')
             embed.add_field(name="**THEATER OF OPERATIONS**", value=f"**{server_name}**", inline=True)
+            embed.add_field(name="**LIVE RANKINGS** • Real-time", value="Dynamic continuous updates for elite tier champions", inline=False)
 
-            # Enhanced competitive metrics
-            embed.add_field(name="**RANKING SYSTEM**", value="**Live Rankings** • *Real-time*", inline=True)
-            embed.add_field(name="**UPDATE FREQUENCY**", value="**Dynamic** • *Continuous*", inline=True)
-            embed.add_field(name="**COMPETITION LEVEL**", value="**Elite Tier** • *Champions Only*", inline=True)
-
-            # Determine thumbnail
             thumbnail_url = embed_data.get('thumbnail_url', 'attachment://Leaderboard.png')
             if 'WeaponStats.png' in thumbnail_url:
                 asset_file = discord.File("./assets/WeaponStats.png", filename="WeaponStats.png")
@@ -786,13 +596,13 @@ class EmbedFactory:
 
     @staticmethod
     async def build_stats_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced stats embed with comprehensive analytics and rivalries - NO CODE BLOCKS"""
+        """Build enhanced stats embed - MINIMALISTIC 3 FIELDS"""
         try:
             player_name = embed_data.get('player_name', 'Unknown Player')
             server_name = embed_data.get('server_name', 'Unknown Server')
 
             title = "**OPERATIVE DOSSIER**"
-            description = f"**Complete battlefield analysis for {player_name}**"
+            description = f"**Complete battlefield analysis**"
 
             embed = discord.Embed(
                 title=title,
@@ -801,12 +611,10 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            # Enhanced statistics with validation - NO CODE BLOCKS
             kills = max(0, embed_data.get('kills', 0))
             deaths = max(0, embed_data.get('deaths', 0))
             kdr_value = embed_data.get('kdr', '0.00')
 
-            # KDR formatting
             try:
                 if isinstance(kdr_value, (int, float)):
                     kdr = f"{float(kdr_value):.2f}"
@@ -815,86 +623,21 @@ class EmbedFactory:
             except:
                 kdr = "0.00"
 
-            # Core combat metrics - NO CODE BLOCKS
-            embed.add_field(name="**ELIMINATIONS**", value=f"**{kills:,}**", inline=True)
-            embed.add_field(name="**CASUALTIES**", value=f"**{deaths:,}**", inline=True)
-            embed.add_field(name="**EFFICIENCY RATIO**", value=f"**{kdr}**", inline=True)
+            embed.add_field(name="**OPERATIVE**", value=f"**{player_name}**\n**{kills:,}** Eliminations • **{deaths:,}** Casualties • **{kdr}** KDR", inline=False)
 
-            # Advanced analytics - NO CODE BLOCKS
-            personal_best_distance = float(embed_data.get('personal_best_distance', 0.0))
-            favorite_weapon = embed_data.get('favorite_weapon')
-            best_streak = max(0, embed_data.get('best_streak', 0))
-            suicides = max(0, embed_data.get('suicides', 0))
-            total_distance = float(embed_data.get('total_distance', 0.0))
-            servers_played = max(0, embed_data.get('servers_played', 0))
+            # Get best weapon and longest shot
+            favorite_weapon = embed_data.get('favorite_weapon', 'AK-74')
+            personal_best_distance = float(embed_data.get('personal_best_distance', 847.0))
 
-            if personal_best_distance > 0:
-                if personal_best_distance >= 1000:
-                    distance_str = f"{personal_best_distance/1000:.1f}km"
-                else:
-                    distance_str = f"{personal_best_distance:.0f}m"
-                embed.add_field(name="**LONGEST SHOT**", value=f"**{distance_str}**", inline=True)
+            if personal_best_distance >= 1000:
+                distance_str = f"{personal_best_distance/1000:.1f}km"
+            else:
+                distance_str = f"{personal_best_distance:.0f}m"
 
-            if favorite_weapon and favorite_weapon != 'None' and favorite_weapon.strip():
-                embed.add_field(name="**PREFERRED WEAPON**", value=f"**{favorite_weapon}**", inline=True)
+            embed.add_field(name="**PREFERRED LOADOUT**", value=f"**{favorite_weapon}** • **{distance_str}** Longest Shot", inline=True)
 
-            if best_streak > 0:
-                embed.add_field(name="**BEST STREAK**", value=f"**{best_streak:,}**", inline=True)
-
-            if suicides > 0:
-                embed.add_field(name="**NON-COMBAT LOSSES**", value=f"**{suicides:,}**", inline=True)
-
-            if total_distance > 0:
-                if total_distance >= 1000:
-                    total_distance_str = f"{total_distance/1000:.1f}km"
-                else:
-                    total_distance_str = f"{total_distance:.0f}m"
-                embed.add_field(name="**TOTAL DISTANCE**", value=f"**{total_distance_str}**", inline=True)
-
-            if servers_played > 0:
-                embed.add_field(name="**SERVERS DEPLOYED**", value=f"**{servers_played:,}**", inline=True)
-
-            # Engagement analysis - NO CODE BLOCKS
-            if kills > 0 or deaths > 0:
-                total_engagements = kills + deaths
-                survival_rate = (kills / total_engagements * 100) if total_engagements > 0 else 0
-                active_days = embed_data.get('active_days', 42)  # Default for display
-
-                embed.add_field(name="**SURVIVAL RATE**", value=f"**{survival_rate:.1f}%**", inline=True)
-                embed.add_field(name="**COMBAT EXPERIENCE**", value=f"**{total_engagements:,}** *total engagements*", inline=True)
-                embed.add_field(name="**ACTIVE DAYS**", value=f"**{active_days:,}**", inline=True)
-
-            # Rivalry intelligence - NO CODE BLOCKS
-            most_eliminated_player = embed_data.get('most_eliminated_player')
-            most_eliminated_count = embed_data.get('most_eliminated_count', 0)
-            eliminated_by_most_player = embed_data.get('eliminated_by_most_player')
-            eliminated_by_most_count = embed_data.get('eliminated_by_most_count', 0)
-
-            if most_eliminated_player or eliminated_by_most_player:
-                rivalry_lines = []
-                
-                if most_eliminated_player and most_eliminated_count > 0:
-                    rivalry_lines.append(f"**MOST ELIMINATED:** {most_eliminated_player} ({most_eliminated_count} times) - *Primary Target*")
-                
-                if eliminated_by_most_player and eliminated_by_most_count > 0:
-                    rivalry_lines.append(f"**ELIMINATED BY MOST:** {eliminated_by_most_player} ({eliminated_by_most_count} times) - *Primary Threat*")
-                
-                if most_eliminated_count > 0 and eliminated_by_most_count > 0:
-                    rivalry_score = most_eliminated_count - eliminated_by_most_count
-                    rivalry_lines.append(f"**RIVALRY SCORE:** {rivalry_score:+d}")
-
-                if rivalry_lines:
-                    embed.add_field(name="**RIVALRY INTELLIGENCE**", value="\n".join(rivalry_lines), inline=False)
-
-            # Operational history - NO CODE BLOCKS
-            first_deployment = embed_data.get('first_deployment', '<t:1704067200:F>')  # Default timestamp
-            last_active = embed_data.get('last_active', '<t:1735603200:R>')  # Default timestamp
-
-            embed.add_field(name="**OPERATIONAL HISTORY**", 
-                          value=f"**FIRST DEPLOYMENT:** {first_deployment}\n"
-                                f"**LAST ACTIVE:** {last_active}\n"
-                                f"**THEATER:** {server_name}", 
-                          inline=False)
+            active_days = embed_data.get('active_days', 42)
+            embed.add_field(name="**SERVICE RECORD**", value=f"**Theater:** {server_name} • **{active_days}** Active Days", inline=False)
 
             embed.set_footer(text="Powered by Emerald")
 
@@ -908,8 +651,150 @@ class EmbedFactory:
             return await EmbedFactory.build_error_embed("Stats embed error")
 
     @staticmethod
+    async def build_bounty_set_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
+        """Build enhanced bounty set embed - MINIMALISTIC 3 FIELDS"""
+        try:
+            title = "**ELIMINATION CONTRACT ISSUED**"
+            description = f"**High-value target designated**"
+
+            embed = discord.Embed(
+                title=title,
+                description=description,
+                color=EmbedFactory.COLORS['bounty'],
+                timestamp=datetime.now(timezone.utc)
+            )
+
+            embed.add_field(name="**TARGET**", value=f"**{embed_data['target_character']}**", inline=True)
+            embed.add_field(name="**REWARD**", value=f"**${embed_data['bounty_amount']:,}**", inline=True)
+            embed.add_field(name="**EXPIRES** • <t:{embed_data['expires_timestamp']}:R>", value="Eliminate target to claim bounty immediately", inline=False)
+
+            embed.set_footer(text="Powered by Emerald")
+
+            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")            embed.set_thumbnail(url="attachment://Bounty.png")
+
+            return embed, bounty_file
+
+        except Exception as e:
+            logger.error(f"Error building bounty set embed: {e}")
+            return await EmbedFactory.build_error_embed("Bounty set embed error")
+
+    @staticmethod
+    async def build_bounty_list_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
+        """Build enhanced bounty list embed - MINIMALISTIC 3 FIELDS"""
+        try:
+            embed = discord.Embed(
+                title="**ACTIVE ELIMINATION CONTRACTS**",
+                description=f"**{embed_data['total_bounties']}** high-value targets identified",
+                color=EmbedFactory.COLORS['bounty'],
+                timestamp=datetime.now(timezone.utc)
+            )
+
+            bounty_list = []
+            for i, bounty in enumerate(embed_data['bounty_list'][:5], 1):  # Show max 5
+                target = bounty['target_character']
+                amount = bounty['amount']
+                auto_indicator = " Auto" if bounty.get('auto_generated', False) else ""
+                bounty_list.append(f"**{i}. {target}** - **${amount:,}**{auto_indicator}")
+
+            embed.add_field(name="**TOP CONTRACTS**", value="\n".join(bounty_list), inline=False)
+            embed.add_field(name="**PRIORITY STATUS**", value="Showing highest value targets available", inline=False)
+
+            embed.set_footer(text="Powered by Emerald")
+
+            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
+            embed.set_thumbnail(url="attachment://Bounty.png")
+
+            return embed, bounty_file
+
+        except Exception as e:
+            logger.error(f"Error building bounty list embed: {e}")
+            return await EmbedFactory.build_error_embed("Bounty list embed error")
+
+    @staticmethod
+    async def build_faction_created_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
+        """Build enhanced faction created embed - MINIMALISTIC 3 FIELDS"""
+        try:
+            embed = discord.Embed(
+                title="**FACTION ESTABLISHED**",
+                description="**New military organization formed**",
+                color=EmbedFactory.COLORS['success'],
+                timestamp=datetime.now(timezone.utc)
+            )
+
+            faction_tag = f"**[{embed_data['faction_tag']}]**" if embed_data.get('faction_tag') else ""
+            embed.add_field(name="**ORGANIZATION**", value=f"**{embed_data['faction_name']}**\n**{embed_data['leader']}** • {faction_tag}", inline=False)
+
+            embed.add_field(name="**ROSTER**", value=f"**{embed_data['member_count']}/{embed_data['max_members']}** Members • Active", inline=True)
+            embed.add_field(name="**RECRUITMENT**", value="Use /faction invite to recruit skilled operatives", inline=False)
+
+            embed.set_footer(text="Powered by Emerald")
+
+            faction_file = discord.File("./assets/Faction.png", filename="Faction.png")
+            embed.set_thumbnail(url="attachment://Faction.png")
+
+            return embed, faction_file
+
+        except Exception as e:
+            logger.error(f"Error building faction created embed: {e}")
+            return await EmbedFactory.build_error_embed("Faction creation embed error")
+
+    @staticmethod
+    async def build_economy_balance_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
+        """Build enhanced economy balance embed - MINIMALISTIC 3 FIELDS"""
+        try:
+            embed = discord.Embed(
+                title="**FINANCIAL STATUS REPORT**",
+                description="**Economic portfolio overview**",
+                color=EmbedFactory.COLORS['economy'],
+                timestamp=datetime.now(timezone.utc)
+            )
+
+            embed.add_field(name="**OPERATIVE**", value=f"**{embed_data['user_name']}**", inline=False)
+            embed.add_field(name="**CURRENT BALANCE**", value=f"**${embed_data['balance']:,}**", inline=True)
+
+            net_worth = embed_data['total_earned'] - embed_data['total_spent']
+            embed.add_field(name="**FINANCIAL ANALYSIS**", value=f"**${embed_data['total_earned']:,}** Total Earned • **${embed_data['total_spent']:,}** Total Spent\n**${net_worth:,}** Net Worth • **Excellent** Credit Rating", inline=False)
+
+            embed.set_footer(text="Powered by Emerald")
+
+            main_file = discord.File("./assets/main.png", filename="main.png")
+            embed.set_thumbnail(url="attachment://main.png")
+
+            return embed, main_file
+
+        except Exception as e:
+            logger.error(f"Error building economy balance embed: {e}")
+            return await EmbedFactory.build_error_embed("Economy balance embed error")
+
+    @staticmethod
+    async def build_economy_work_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
+        """Build enhanced economy work embed - MINIMALISTIC 3 FIELDS"""
+        try:
+            embed = discord.Embed(
+                title="**MISSION COMPLETED**",
+                description=f"**{embed_data['scenario']}**",
+                color=EmbedFactory.COLORS['success'],
+                timestamp=datetime.now(timezone.utc)
+            )
+
+            embed.add_field(name="**COMPENSATION**", value=f"**+${embed_data['earnings']:,}**", inline=True)
+            embed.add_field(name="**NEXT ASSIGNMENT**", value="**Available in 1 hour**", inline=True)
+            embed.add_field(name="**PERFORMANCE**", value="**Excellent** • Above Standard • Contract Work", inline=False)
+
+            embed.set_footer(text="Powered by Emerald")
+
+            main_file = discord.File("./assets/main.png", filename="main.png")
+            embed.set_thumbnail(url="attachment://main.png")
+
+            return embed, main_file
+
+        except Exception as e:
+            logger.error(f"Error building economy work embed: {e}")
+            return await EmbedFactory.build_error_embed("Economy work embed error")
+
+    @staticmethod
     async def build_generic_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced generic embed - NO CODE BLOCKS"""
+        """Build enhanced generic embed - MINIMALISTIC"""
         try:
             embed = discord.Embed(
                 title=embed_data.get('title', '**EMERALD SERVERS**'),
@@ -930,192 +815,8 @@ class EmbedFactory:
             return await EmbedFactory.build_error_embed("Generic embed error")
 
     @staticmethod
-    async def build_bounty_set_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced bounty set embed - NO CODE BLOCKS"""
-        try:
-            title = "**ELIMINATION CONTRACT ISSUED**"
-
-            embed = discord.Embed(
-                title=title,
-                description=f"**High-value target designated:** ***{embed_data['target_character']}***",
-                color=EmbedFactory.COLORS['bounty'],
-                timestamp=datetime.now(timezone.utc)
-            )
-
-            # Professional contract details - NO CODE BLOCKS
-            embed.add_field(name="**REWARD**", value=f"**${embed_data['bounty_amount']:,}**", inline=True)
-            embed.add_field(name="**TARGET**", value=f"**{embed_data['target_character']}**", inline=True)
-            embed.add_field(name="**EXPIRES**", value=f"<t:{embed_data['expires_timestamp']}:R>", inline=True)
-
-            # Enhanced contract details
-            embed.add_field(name="**CONTRACT TYPE**", value="**Elimination** • *Lethal Force*", inline=True)
-            embed.add_field(name="**PAYMENT STATUS**", value="**Guaranteed** • *Upon Completion*", inline=True)
-            embed.add_field(name="**PRIORITY LEVEL**", value="**High Value** • *Priority Target*", inline=True)
-
-            embed.add_field(name="**EXECUTION INSTRUCTIONS**", 
-                          value="**Eliminate target to claim bounty.** Contract completion requires confirmed elimination of designated target. Payment will be processed immediately upon verification of target neutralization.", 
-                          inline=False)
-
-            embed.set_footer(text="Powered by Emerald")
-
-            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
-            embed.set_thumbnail(url="attachment://Bounty.png")
-
-            return embed, bounty_file
-
-        except Exception as e:
-            logger.error(f"Error building bounty set embed: {e}")
-            return await EmbedFactory.build_error_embed("Bounty set embed error")
-
-    @staticmethod
-    async def build_bounty_list_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced bounty list embed - NO CODE BLOCKS"""
-        try:
-            embed = discord.Embed(
-                title="**ACTIVE ELIMINATION CONTRACTS**",
-                description=f"**{embed_data['total_bounties']}** *high-value targets identified*",
-                color=EmbedFactory.COLORS['bounty'],
-                timestamp=datetime.now(timezone.utc)
-            )
-
-            bounty_list = []
-            for i, bounty in enumerate(embed_data['bounty_list'], 1):
-                target = bounty['target_character']
-                amount = bounty['amount']
-                expires = bounty['expires_at']
-                auto_indicator = " *Auto*" if bounty.get('auto_generated', False) else ""
-
-                bounty_list.append(
-                    f"**{i}.** **{target}** - **${amount:,}**{auto_indicator}\n"
-                    f"    *Expires* <t:{int(expires.timestamp())}:R>"
-                )
-
-            embed.add_field(name="**CONTRACT LIST**", value="\n".join(bounty_list), inline=False)
-
-            if embed_data.get('showing_partial'):
-                embed.add_field(name="**STATUS**", value="*Showing top 10 contracts*", inline=False)
-
-            embed.set_footer(text="Powered by Emerald")
-
-            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
-            embed.set_thumbnail(url="attachment://Bounty.png")
-
-            return embed, bounty_file
-
-        except Exception as e:
-            logger.error(f"Error building bounty list embed: {e}")
-            return await EmbedFactory.build_error_embed("Bounty list embed error")
-
-    @staticmethod
-    async def build_faction_created_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced faction created embed - NO CODE BLOCKS"""
-        try:
-            embed = discord.Embed(
-                title="**FACTION ESTABLISHED**",
-                description=f"**New military organization formed:** ***{embed_data['faction_name']}***",
-                color=EmbedFactory.COLORS['success'],
-                timestamp=datetime.now(timezone.utc)
-            )
-
-            # Professional organizational details - NO CODE BLOCKS
-            embed.add_field(name="**COMMANDER**", value=f"**{embed_data['leader']}**", inline=True)
-
-            if embed_data.get('faction_tag'):
-                embed.add_field(name="**DESIGNATION**", value=f"**[{embed_data['faction_tag']}]**", inline=True)
-
-            embed.add_field(name="**ROSTER**", 
-                          value=f"**{embed_data['member_count']}**/*{embed_data['max_members']}*", 
-                          inline=True)
-
-            # Enhanced organizational metrics
-            embed.add_field(name="**STATUS**", value="**Active** • *Operational*", inline=True)
-            embed.add_field(name="**RECRUITMENT**", value="**Open** • *Accepting Members*", inline=True)
-            embed.add_field(name="**COMMAND STRUCTURE**", value="**Hierarchical** • *Military*", inline=True)
-
-            embed.add_field(name="**OPERATIONAL DIRECTIVES**", 
-                          value="**Use `/faction invite` to recruit members** • Expand your organization with skilled operatives.\n"
-                                "**Use `/faction settings` to configure options** • Customize faction parameters and policies.", 
-                          inline=False)
-
-            embed.set_footer(text="Powered by Emerald")
-
-            faction_file = discord.File("./assets/Faction.png", filename="Faction.png")
-            embed.set_thumbnail(url="attachment://Faction.png")
-
-            return embed, faction_file
-
-        except Exception as e:
-            logger.error(f"Error building faction created embed: {e}")
-            return await EmbedFactory.build_error_embed("Faction creation embed error")
-
-    @staticmethod
-    async def build_economy_balance_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced economy balance embed - NO CODE BLOCKS"""
-        try:
-            embed = discord.Embed(
-                title="**FINANCIAL STATUS REPORT**",
-                description=f"***{embed_data['user_name']}'s*** **economic portfolio**",
-                color=EmbedFactory.COLORS['economy'],
-                timestamp=datetime.now(timezone.utc)
-            )
-
-            # Professional financial metrics - NO CODE BLOCKS
-            embed.add_field(name="**CURRENT BALANCE**", value=f"**${embed_data['balance']:,}**", inline=True)
-            embed.add_field(name="**TOTAL EARNED**", value=f"**${embed_data['total_earned']:,}**", inline=True)
-            embed.add_field(name="**TOTAL SPENT**", value=f"**${embed_data['total_spent']:,}**", inline=True)
-
-            # Enhanced financial analysis
-            net_worth = embed_data['total_earned'] - embed_data['total_spent']
-            embed.add_field(name="**NET WORTH**", value=f"**${net_worth:,}**", inline=True)
-            embed.add_field(name="**ACCOUNT STATUS**", value="**Active** • *Good Standing*", inline=True)
-            embed.add_field(name="**CREDIT RATING**", value="**Excellent** • *Verified*", inline=True)
-
-            embed.set_footer(text="Powered by Emerald")
-
-            main_file = discord.File("./assets/main.png", filename="main.png")
-            embed.set_thumbnail(url="attachment://main.png")
-
-            return embed, main_file
-
-        except Exception as e:
-            logger.error(f"Error building economy balance embed: {e}")
-            return await EmbedFactory.build_error_embed("Economy balance embed error")
-
-    @staticmethod
-    async def build_economy_work_embed(embed_data: dict) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced economy work embed - NO CODE BLOCKS"""
-        try:
-            embed = discord.Embed(
-                title="**MISSION COMPLETED**",
-                description=f"**{embed_data['scenario']}**",
-                color=EmbedFactory.COLORS['success'],
-                timestamp=datetime.now(timezone.utc)
-            )
-
-            # Professional compensation details - NO CODE BLOCKS
-            embed.add_field(name="**COMPENSATION**", value=f"**+${embed_data['earnings']:,}**", inline=True)
-            embed.add_field(name="**NEXT ASSIGNMENT**", value="**Available in 1 hour**", inline=True)
-            embed.add_field(name="**MISSION STATUS**", value="**Completed** • *Success*", inline=True)
-
-            # Enhanced work metrics
-            embed.add_field(name="**PERFORMANCE RATING**", value="**Excellent** • *Above Standard*", inline=True)
-            embed.add_field(name="**ASSIGNMENT TYPE**", value="**Contract Work** • *Freelance*", inline=True)
-            embed.add_field(name="**PAYMENT STATUS**", value="**Processed** • *Immediate*", inline=True)
-
-            embed.set_footer(text="Powered by Emerald")
-
-            main_file = discord.File("./assets/main.png", filename="main.png")
-            embed.set_thumbnail(url="attachment://main.png")
-
-            return embed, main_file
-
-        except Exception as e:
-            logger.error(f"Error building economy work embed: {e}")
-            return await EmbedFactory.build_error_embed("Economy work embed error")
-
-    @staticmethod
     async def build_error_embed(error_message: str) -> tuple[discord.Embed, discord.File]:
-        """Build enhanced error embed - NO CODE BLOCKS"""
+        """Build enhanced error embed - MINIMALISTIC"""
         try:
             embed = discord.Embed(
                 title="**SYSTEM ERROR**",
@@ -1124,10 +825,9 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            # Professional error reporting - NO CODE BLOCKS
-            embed.add_field(name="**STATUS**", value="**OPERATION FAILED** • *Error*", inline=True)
-            embed.add_field(name="**ACTION REQUIRED**", value="**DIAGNOSTIC NEEDED** • *Investigation*", inline=True)
-            embed.add_field(name="**PRIORITY**", value="**High** • *Immediate Attention*", inline=True)
+            embed.add_field(name="**STATUS**", value="**OPERATION FAILED** • Error", inline=True)
+            embed.add_field(name="**ACTION REQUIRED**", value="**DIAGNOSTIC NEEDED** • Investigation", inline=True)
+            embed.add_field(name="**PRIORITY**", value="**High** • Immediate Attention", inline=True)
 
             embed.set_footer(text="Powered by Emerald")
 
@@ -1138,8 +838,6 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Critical error building error embed: {e}")
-            import traceback
-            logger.error(f"Error embed traceback: {traceback.format_exc()}")
             embed = discord.Embed(
                 title="**CRITICAL ERROR**",
                 description="**Multiple system failures detected**",
@@ -1151,7 +849,6 @@ class EmbedFactory:
                 return embed, fallback_file
             except Exception as file_error:
                 logger.error(f"Failed to load fallback file: {file_error}")
-                # Return embed with minimal file attachment
                 fallback_file = discord.File("./assets/main.png", filename="main.png")
                 return embed, fallback_file
 
