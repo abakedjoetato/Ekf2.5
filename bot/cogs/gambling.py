@@ -1,3 +1,4 @@
+"""Complete implementation of analytics dashboard with thumbnail and fixes."""
 """
 Emerald's Killfeed - ULTIMATE GAMBLING SYSTEM v7.0 (SUPREMACY EDITION)
 Revolutionary Discord-native casino with Modal Integration, Select Menu Matrix, Button Matrix Systems
@@ -798,7 +799,10 @@ class Gambling(commands.Cog):
                 return
 
             # Get balance for bet selection
-            wallet = await self.bot.db_manager.get_wallet(guild_idEMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            ifEMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
