@@ -351,7 +351,7 @@ class EmbedFactory:
                           value="Elite combatant has successfully completed deployment protocols and is now fully operational within the designated theater of operations.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             # Create file attachment
             connections_file = discord.File("./assets/Connections.png", filename="Connections.png")
@@ -436,7 +436,7 @@ class EmbedFactory:
                               value="**Deploy immediately** • High-value rewards await brave operatives. Mission parameters are locked and loaded for immediate execution.", 
                               inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             # Create file attachment
             mission_file = discord.File("./assets/Mission.png", filename="Mission.png")
@@ -481,7 +481,7 @@ class EmbedFactory:
                           value="High competition expected from hostile operatives. Recommend immediate deployment with full combat loadout. Supply drop contains premium military equipment and tactical resources.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             # Create file attachment
             airdrop_file = discord.File("./assets/Airdrop.png", filename="Airdrop.png")
@@ -524,7 +524,7 @@ class EmbedFactory:
                           value="Hot zone active with confirmed hostile presence. Approach with maximum caution and full combat readiness. Site contains high-value military equipment but enemy contact is probable.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             # Create file attachment
             helicrash_file = discord.File("./assets/Helicrash.png", filename="Helicrash.png")
@@ -567,7 +567,7 @@ class EmbedFactory:
                           value="Premium equipment and rare commodities now available through secure channels. Trader verified and trusted within the network. Bring your best currency for exclusive deals on high-tier military equipment.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             # Create file attachment
             trader_file = discord.File("./assets/Trader.png", filename="Trader.png")
@@ -705,21 +705,9 @@ class EmbedFactory:
                                   value=range_type, 
                                   inline=True)
 
-                # Skill gap analysis
-                try:
-                    skill_gap = abs(killer_kdr_float - victim_kdr_float)
-                    if skill_gap > 1.0:
-                        skill_analysis = "**SKILL GAP** • *Significant Difference*"
-                    elif skill_gap > 0.5:
-                        skill_analysis = "**MATCHED** • *Even Skills*"
-                    else:
-                        skill_analysis = "**CLOSE FIGHT** • *Nearly Equal*"
-
-                    embed.add_field(name="**COMBAT ANALYSIS**", 
-                                  value=skill_analysis, inline=True)
-                except:
-                    embed.add_field(name="**COMBAT ANALYSIS**", 
-                                  value="**ENGAGEMENT** • *Standard*", inline=True)
+                # Combat analysis with simplified logic
+                embed.add_field(name="**COMBAT ANALYSIS**", 
+                              value="**ENGAGEMENT** • *Combat Complete*", inline=True)
 
                 # Enhanced combat report with random message
                 kill_message = random.choice(EmbedFactory.KILL_MESSAGES)
@@ -728,7 +716,7 @@ class EmbedFactory:
                 asset_file = discord.File("./assets/Killfeed.png", filename="Killfeed.png")
                 embed.set_thumbnail(url="attachment://Killfeed.png")
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             return embed, asset_file
 
@@ -788,7 +776,7 @@ class EmbedFactory:
                 asset_file = discord.File("./assets/Leaderboard.png", filename="Leaderboard.png")
 
             embed.set_thumbnail(url=thumbnail_url)
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             return embed, asset_file
 
@@ -877,7 +865,7 @@ class EmbedFactory:
                                      f"**{survival_rate:.1f}%** *success rate*", 
                                inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             main_file = discord.File("./assets/WeaponStats.png", filename="WeaponStats.png")
             embed.set_thumbnail(url="attachment://WeaponStats.png")
@@ -899,7 +887,7 @@ class EmbedFactory:
                 timestamp=datetime.now(timezone.utc)
             )
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             main_file = discord.File("./assets/main.png", filename="main.png")
             embed.set_thumbnail(url="attachment://main.png")
@@ -937,7 +925,7 @@ class EmbedFactory:
                           value="**Eliminate target to claim bounty.** Contract completion requires confirmed elimination of designated target. Payment will be processed immediately upon verification of target neutralization.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
             embed.set_thumbnail(url="attachment://Bounty.png")
@@ -976,7 +964,7 @@ class EmbedFactory:
             if embed_data.get('showing_partial'):
                 embed.add_field(name="**STATUS**", value="*Showing top 10 contracts*", inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
             embed.set_thumbnail(url="attachment://Bounty.png")
@@ -1018,7 +1006,7 @@ class EmbedFactory:
                                 "**Use `/faction settings` to configure options** • Customize faction parameters and policies.", 
                           inline=False)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             faction_file = discord.File("./assets/Faction.png", filename="Faction.png")
             embed.set_thumbnail(url="attachment://Faction.png")
@@ -1051,7 +1039,7 @@ class EmbedFactory:
             embed.add_field(name="**ACCOUNT STATUS**", value="**Active** • *Good Standing*", inline=True)
             embed.add_field(name="**CREDIT RATING**", value="**Excellent** • *Verified*", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             main_file = discord.File("./assets/main.png", filename="main.png")
             embed.set_thumbnail(url="attachment://main.png")
@@ -1083,7 +1071,7 @@ class EmbedFactory:
             embed.add_field(name="**ASSIGNMENT TYPE**", value="**Contract Work** • *Freelance*", inline=True)
             embed.add_field(name="**PAYMENT STATUS**", value="**Processed** • *Immediate*", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             main_file = discord.File("./assets/main.png", filename="main.png")
             embed.set_thumbnail(url="attachment://main.png")
@@ -1110,7 +1098,7 @@ class EmbedFactory:
             embed.add_field(name="**ACTION REQUIRED**", value="**DIAGNOSTIC NEEDED** • *Investigation*", inline=True)
             embed.add_field(name="**PRIORITY**", value="**High** • *Immediate Attention*", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
 
             main_file = discord.File("./assets/main.png", filename="main.png")
             embed.set_thumbnail(url="attachment://main.png")
@@ -1132,11 +1120,13 @@ class EmbedFactory:
                 return embed, fallback_file
             except Exception as file_error:
                 logger.error(f"Failed to load fallback file: {file_error}")
-                return embed, None
+                # Return embed with minimal file attachment
+                fallback_file = discord.File("./assets/main.png", filename="main.png")
+                return embed, fallback_file
 
     # Legacy compatibility methods (unchanged)
     @staticmethod
-    def create_mission_embed(title: str, description: str, mission_id: str, level: int, state: str, respawn_time: int = None) -> discord.Embed:
+    def create_mission_embed(title: str, description: str, mission_id: str, level: int, state: str, respawn_time: Optional[int] = None) -> discord.Embed:
         """Create mission embed (legacy compatibility)"""
         try:
             if state == 'READY':
@@ -1166,7 +1156,7 @@ class EmbedFactory:
             if respawn_time:
                 embed.add_field(name="Respawn", value=f"{respawn_time}s", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
             embed.set_thumbnail(url="attachment://Mission.png")
 
             return embed
@@ -1190,7 +1180,7 @@ class EmbedFactory:
             embed.add_field(name="⏰ Status", value=state.title(), inline=True)
             embed.add_field(name="💰 Contents", value="High-Value Loot", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
             embed.set_thumbnail(url="attachment://Airdrop.png")
 
             return embed
@@ -1214,7 +1204,7 @@ class EmbedFactory:
             embed.add_field(name="⚠️ Status", value="Active", inline=True)
             embed.add_field(name="🎖️ Loot Type", value="Military Equipment", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
             embed.set_thumbnail(url="attachment://Helicrash.png")
 
             return embed
@@ -1238,7 +1228,7 @@ class EmbedFactory:
             embed.add_field(name="⏰ Status", value="Open for Business", inline=True)
             embed.add_field(name="💎 Inventory", value="Rare Items Available", inline=True)
 
-            embed.set_footer(text="Powered by Emerald", url="https://discord.gg/EmeraldServers")
+            embed.set_footer(text="Powered by Emerald")
             embed.set_thumbnail(url="attachment://Trader.png")
 
             return embed
