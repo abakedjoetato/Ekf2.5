@@ -798,7 +798,54 @@ class Gambling(commands.Cog):
                 return
 
             # Get balance for bet selection
-            wallet = await self.bot.db_EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+            wallet = await self.bot.db_manager.get_wallet(guild_idEMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                inline=False
+            )
+
+            embed.set_footer(text="🚀 Ultimate AI Gaming Engine | Select your bet amount")
+
+            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
+            if hasattr(interaction, 'response') and not interaction.response.is_done():
+                await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
+            else:
+                await interaction.edit_original_response(embed=embed, file=gamble_file, view=view)
+
+            # Store the game type
+            self.pending_games[discord_id] = {'game_type': game_type}
+
+        except Exception as e:
+            logger.error(f"Game selection failed: {e}")
+            await interaction.response.send_message("❌ Game selection failed.", ephemeral=True)
+
+    async def _initialize_slots_game(self, interaction: discord.Interaction, bet: int, game_data: Dict):
+        """Initialize slots game"""
+        try:
+            guild_id = interaction.guild.id
+            discord_id = interaction.user.id
+
+            # Validate bet amount
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            if bet > balance:
+                await interaction.response.send_message(f"❌ Insufficient funds! You have ${balance:,}", ephemeral=True)
+                return
+
+            # Deduct bet from wallet
+            await self.bot.db_manager.update_wallet(guild_id, discord_id, -bet, "gambling_slots")
+
+            # Update embed
+            embed_data = {
+                'title': "🎰 ULTIMATE SLOTS - AI ENHANCED",
+                'description': f"**Bet:** ${bet:,}\n**AI Mode:** Active\n**Reel Physics:** Enabled\n\n🤖 **AI analyzing your play style...**"
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
+
+            embed.add_field(
+                name="💎 Payout Multipliers",
+                value="```EMERALD EMERALD EMERALD = 200x Bet (MYTHIC JACKPOT)\nSEVEN SEVEN SEVEN = 100x Bet (LEGENDARY)\nSKULL SKULL SKULL = 50x Bet (EPIC DEATH)\nBOX BOX BOX = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
