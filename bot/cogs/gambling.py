@@ -759,7 +759,7 @@ class Gambling(commands.Cog):
             embed_data = {
                 'title': "🎰 ULTIMATE GAMBLING HUB v7.0",
                 'description': f"**Welcome to the Supreme Casino Experience**\n\n💰 **Current Balance:** ${balance:,}\n🎲 **Available Games:** Elite Slots, Interactive Blackjack, Physics Roulette\n🤖 **AI Features:** Behavioral Analysis, Personalized Recommendations\n\n*Select a game below to begin your journey to riches...*",
-                
+
             }
             embed, gamble_file = await EmbedFactory.build('generic', embed_data)
             embed.color = 0x7f5af0
@@ -798,7 +798,8 @@ class Gambling(commands.Cog):
                 return
 
             # Get balance for bet selection
-            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance =💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
                 inline=False
             )
 
@@ -909,3 +910,331 @@ class Gambling(commands.Cog):
             embed.add_field(
                 name="🎲 Final AI-Enhanced Reels",
                 value=f"```{reel_display}\n{rarity_line}
+```\n💰 **Winnings:** ${winnings:,} (x{multiplier:.1f})\n🤖 **Net Result:** ${net_result:,}",
+                inline=False
+            )
+
+            # AI insights display
+            recommendations = self.ai_engine.generate_personalized_recommendations(str(discord_id))
+            if recommendations:
+                ai_display = "\n".join([f"• {rec}" for rec in recommendations])
+                embed.add_field(
+                    name="🤖 AI Insights",
+                    value=f"```AI Recommendations:\n{ai_display}```",
+                    inline=False
+                )
+
+            # Contextual message based on outcome
+            context_key = 'mythic_win' if any(symbol == '💎' for symbol in reels) and len(set(reels)) == 1 else win_type
+            messages = self.contextual_messages['slots'].get(context_key, ["Fortune favors the bold!"])
+            message = random.choice(messages)
+
+            embed.add_field(
+                name="📢 Quantum Announcer",
+                value=f"```AI Message: {message}```",
+                inline=False
+            )
+
+            embed.set_footer(text=f"💰 Updated Balance: ${updated_wallet.get('balance', 0):,} | Ultimate AI Gaming Engine")
+
+            # Re-enable view
+            view.clear_items()
+            view._setup_slots_interface()
+
+            gamble_file = discord.File('./assets/Gamble.png', filename='Gamble.png')
+            await interaction.edit_original_response(embed=embed, file=gamble_file, view=view)
+
+        except Exception as e:
+            logger.error(f"Slots spin failed: {e}")
+            await interaction.edit_original_response(content="❌ Spin failed. Please try again.")
+
+    def _generate_ai_enhanced_reels(self, user_id: str) -> List[str]:
+        """Generate AI-enhanced slot reels based on player behavior"""
+        try:
+            # Get risk profile
+            profile = self.ai_engine.player_profiles.get(user_id, {})
+            risk_data = profile.get('ai_insights', {}).get('risk_assessment', {})
+            risk_profile = risk_data.get('profile', 'moderate')
+
+            # Adjust weights based on risk profile
+            weights = {symbol: data['weight'] for symbol, data in self.slot_symbols.items()}
+            if risk_profile == 'conservative':
+                for symbol in ['💀', '💎', '7️⃣']:
+                    weights[symbol] = int(weights[symbol] * 1.5)  # Reduce chance of high-risk symbols
+            elif risk_profile == 'aggressive':
+                for symbol in ['🍒', '🍋', '🔫']:
+                    weights[symbol] = int(weights[symbol] * 1.2)  # Reduce chance of low-risk symbols
+
+            # Generate reels using adjusted weights
+            symbols = list(weights.keys())
+            adjusted_weights = list(weights.values())
+
+            reels = random.choices(symbols, weights=adjusted_weights, k=3)
+            return reels
+
+        except Exception as e:
+            logger.error(f"Reel gen failed: {e}")
+            return ['🍋', '🍒', '🔫']  # Default reels on failure
+
+    def _calculate_ai_slots_payout(self, reels: List[str], bet: int, user_id: str) -> Tuple[int, str, float]:
+        """Calculate AI-enhanced slots payout with dynamic multipliers"""
+        try:
+            # Check for Mythic Jackpot (all emeralds)
+            if all(symbol == '💎' for symbol in reels):
+                return bet * 200, 'mythic_win', 200.0
+
+            # Check for Legendary Win (all sevens)
+            if all(symbol == '7️⃣' for symbol in reels):
+                return bet * 100, 'big_win', 100.0
+
+            # Check for Epic Win (all skulls)
+            if all(symbol == '💀' for symbol in reels):
+                return bet * 50, 'big_win', 50.0
+
+            # Check for Rare Win (all boxes)
+            if all(symbol == '📦' for symbol in reels):
+                return bet * 25, 'regular_win', 25.0
+
+            # Check for double match
+            if reels[0] == reels[1] or reels[0] == reels[2] or reels[1] == reels[2]:
+                multiplier = 5.0  # Base multiplier
+                ai_profile = self.ai_engine.player_profiles.get(user_id, {}).get('ai_insights', {}).get('risk_assessment', {})
+                if ai_profile.get('profile') == 'high_roller':
+                    multiplier *= 1.5  # Boost for high rollers
+                elif ai_profile.get('profile') == 'conservative':
+                    multiplier *= 0.8  # Reduce for conservative players
+                winnings = int(bet * multiplier)
+                return winnings, 'regular_win', multiplier
+
+            # Check for near miss (two of the same symbol)
+            symbol_counts = {}
+            for symbol in reels:
+                symbol_counts[symbol] = symbol_counts.get(symbol, 0) + 1
+            if 2 in symbol_counts.values():
+                return int(bet * 0.2), 'near_miss', 0.2  # Consolation prize
+
+            # No win
+            return 0, 'loss', 0.0
+
+        except Exception as e:
+            logger.error(f"Payout error: {e}")
+            return 0, 'loss', 0.0
+
+    def _get_reel_rarity_display(self, reels: List[str]) -> str:
+        """Get rarity display for reels"""
+        try:
+            rarities = [self.slot_symbols[symbol]['rarity'][0] for symbol in reels]  # First letter of rarity
+            return f"  {'   '.join(rarities)}  "
+        except Exception as e:
+            logger.error(f"Rarity error: {e}")
+            return "  U   U   U  "  # Unknown
+    
+    async def _adjust_bet(self, interaction: discord.Interaction, view: UltimateGamblingView, amount: int):
+        """Adjust the current bet amount"""
+        try:
+            guild_id = interaction.guild.id
+            discord_id = interaction.user.id
+
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            new_bet = view.current_bet + amount
+            if new_bet < 100:
+                new_bet = 100  # Min bet
+
+            if new_bet > balance:
+                new_bet = balance  # Max bet
+
+            view.current_bet = new_bet
+
+            # Update embed
+            embed_data = {
+                'title': "🎰 ULTIMATE SLOTS - AI ENHANCED",
+                'description': f"**Bet:** ${new_bet:,}\n**AI Mode:** Active\n**Reel Physics:** Enabled\n\n🤖 **AI analyzing your play style...**"
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
+
+            embed.add_field(
+                name="💎 Payout Multipliers",
+                value="```💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                inline=False
+            )
+
+            embed.set_footer(text="🚀 Ultimate AI Gaming Engine | Click SPIN to begin")
+
+            if hasattr(interaction, 'response') and not interaction.response.is_done():
+                await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
+            else:
+                await interaction.edit_original_response(embed=embed, file=gamble_file, view=view)
+
+        except Exception as e:
+            logger.error(f"Bet adjust failed: {e}")
+
+    async def _set_max_bet(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Set the bet to the maximum allowed"""
+        try:
+            guild_id = interaction.guild.id
+            discord_id = interaction.user.id
+
+            wallet = await self.bot.db_manager.get_wallet(guild_id, discord_id)
+            balance = wallet.get('balance', 0)
+
+            view.current_bet = balance
+
+            # Update embed
+            embed_data = {
+                'title': "🎰 ULTIMATE SLOTS - AI ENHANCED",
+                'description': f"**Bet:** ${balance:,}\n**AI Mode:** Active\n**Reel Physics:** Enabled\n\n🤖 **AI analyzing your play style...**"
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
+
+            embed.add_field(
+                name="💎 Payout Multipliers",
+                value="```💎💎💎 = 200x Bet (MYTHIC JACKPOT)\n7️⃣7️⃣7️⃣ = 100x Bet (LEGENDARY)\n💀💀💀 = 50x Bet (EPIC DEATH)\n📦📦📦 = 25x Bet (RARE MYSTERY)\nDouble Match = Dynamic AI Multiplier\nNear Miss = Intelligent Consolation```",
+                inline=False
+            )
+
+            embed.set_footer(text="🚀 Ultimate AI Gaming Engine | Click SPIN to begin")
+
+            if hasattr(interaction, 'response') and not interaction.response.is_done():
+                await interaction.response.edit_message(embed=embed, file=gamble_file, view=view)
+            else:
+                await interaction.edit_original_response(embed=embed, file=gamble_file, view=view)
+
+        except Exception as e:
+            logger.error(f"Max bet failed: {e}")
+
+    async def _initialize_blackjack_game(self, interaction: discord.Interaction, bet: int, game_data: Dict):
+        """Initialize blackjack game"""
+        try:
+            await interaction.response.send_message("Blackjack game initializing...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Blackjack init failed: {e}")
+
+    async def _blackjack_hit(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Handle blackjack hit"""
+        try:
+            await interaction.response.send_message("Hit action...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Blackjack hit failed: {e}")
+
+    async def _blackjack_stand(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Handle blackjack stand"""
+        try:
+            await interaction.response.send_message("Stand action...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Blackjack stand failed: {e}")
+
+    async def _blackjack_double(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Handle blackjack double"""
+        try:
+            await interaction.response.send_message("Double action...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Blackjack double failed: {e}")
+
+    async def _blackjack_surrender(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Handle blackjack surrender"""
+        try:
+            await interaction.response.send_message("Surrender action...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Blackjack surrender failed: {e}")
+
+    async def _initialize_roulette_game(self, interaction: discord.Interaction, bet: int, game_data: Dict):
+        """Initialize roulette game"""
+        try:
+            await interaction.response.send_message("Roulette game initializing...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Roulette init failed: {e}")
+
+    async def _execute_roulette_spin(self, interaction: discord.Interaction, view: UltimateGamblingView):
+        """Execute roulette spin"""
+        try:
+            await interaction.response.send_message("Roulette spin executing...", ephemeral=True)
+        except Exception as e:
+            logger.error(f"Roulette spin failed: {e}")
+
+    async def _show_analytics_dashboard(self, interaction: discord.Interaction):
+        """Display analytics dashboard"""
+        try:
+            user_id = str(interaction.user.id)
+            profile = self.ai_engine.player_profiles.get(user_id, {})
+
+            if not profile:
+                await interaction.response.send_message("📊 No data available yet. Play some games to unlock AI insights!", ephemeral=True)
+                return
+
+            insights = profile.get('ai_insights', {})
+
+            # Basic stats
+            total_games = profile.get('total_games', 0)
+            total_wagered = profile.get('total_wagered', 0)
+            total_winnings = profile.get('total_winnings', 0)
+            net_profit = total_winnings - total_wagered
+
+            # Risk profile display
+            risk_data = insights.get('risk_assessment', {})
+            risk_profile = risk_data.get('profile', 'unknown').title()
+            risk_score = risk_data.get('score', 0)
+            win_rate = risk_data.get('win_rate', 0)
+
+            # Betting pattern display
+            pattern_data = insights.get('pattern_recognition', {})
+            betting_pattern = pattern_data.get('pattern', 'unknown').title()
+            avg_bet = pattern_data.get('avg_bet', 0)
+            bet_trend = pattern_data.get('trend', 0)
+
+            # Session behavior display
+            session_data = insights.get('session_analysis', {})
+            session_behavior = session_data.get('behavior', 'unknown').title()
+            session_length = session_data.get('session_length', 0)
+            session_result = session_data.get('net_result', 0)
+
+            # Predictive modeling display
+            prediction_data = insights.get('predictive_modeling', {})
+            prediction = prediction_data.get('prediction', 'unknown').title()
+            confidence = prediction_data.get('confidence', 0)
+
+            # Personalized recommendations
+            recommendations = self.ai_engine.generate_personalized_recommendations(user_id)
+            recommendation_display = "\n".join([f"• {rec}" for rec in recommendations]) if recommendations else "No recommendations available."
+
+            # Create analytics embed
+            embed_data = {
+                'title': "📊 AI GAMBLING ANALYTICS DASHBOARD",
+                'description': f"🤖 **AI-Powered Insights for Strategic Play**\n\n💎 **Basic Stats:**\n```Total Games: {total_games}\nWagered: ${total_wagered:,}\nWinnings: ${total_winnings:,}\nNet Profit: ${net_profit:,}```\n",
+            }
+            embed, gamble_file = await EmbedFactory.build('generic', embed_data)
+            embed.color = 0x7f5af0
+            embed.set_thumbnail(url="attachment://Gamble.png")
+
+            embed.add_field(
+                name="🛡️ Risk Profile",
+                value=f"```Profile: {risk_profile}\nScore: {risk_score:.1f}\nWin Rate: {win_rate:.2%}```",
+                inline=True
+            )
+
+            embed.add_field(
+                name="📈 Betting Pattern",
+                value=f"```Pattern: {betting_pattern}\nAvg Bet: ${avg_bet:.0f}\nTrend: {bet_trend:.2f}```",
+                inline=True
+            )
+
+            embed.add_field(
+                name="Session Behavior",
+                value=f"```Behavior: {session_behavior}\nLength: {session_length} games\nResult: ${session_result:,}```",
+                inline=False
+            )
+
+            embed.add_field(
+                name="🔮 Predictive Modeling",
+                value=f"```Prediction: {prediction}\nConfidence: {confidence:.1%}```",
+                inline=False
+            )
+
+            embed.add_field(
+                name="🤖 Personalized Recommendations",
+                value=f"```{recommendation_display}
