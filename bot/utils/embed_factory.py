@@ -670,7 +670,8 @@ class EmbedFactory:
 
             embed.set_footer(text="Powered by Emerald")
 
-            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")            embed.set_thumbnail(url="attachment://Bounty.png")
+            bounty_file = discord.File("./assets/Bounty.png", filename="Bounty.png")
+            embed.set_thumbnail(url="attachment://Bounty.png")
 
             return embed, bounty_file
 
