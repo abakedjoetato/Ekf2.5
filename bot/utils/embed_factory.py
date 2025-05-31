@@ -361,6 +361,8 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Error building connection embed: {e}")
+            import traceback
+            logger.error(f"Connection embed traceback: {traceback.format_exc()}")
             return await EmbedFactory.build_error_embed("Connection embed error")
 
     @staticmethod
@@ -444,6 +446,8 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Error building mission embed: {e}")
+            import traceback
+            logger.error(f"Mission embed traceback: {traceback.format_exc()}")
             return await EmbedFactory.build_error_embed("Mission embed error")
 
     @staticmethod
@@ -1115,14 +1119,20 @@ class EmbedFactory:
 
         except Exception as e:
             logger.error(f"Critical error building error embed: {e}")
+            import traceback
+            logger.error(f"Error embed traceback: {traceback.format_exc()}")
             embed = discord.Embed(
                 title="**CRITICAL ERROR**",
                 description="**Multiple system failures detected**",
                 color=0xFF0000,
                 timestamp=datetime.now(timezone.utc)
             )
-            fallback_file = discord.File("./assets/main.png", filename="main.png")
-            return embed, fallback_file
+            try:
+                fallback_file = discord.File("./assets/main.png", filename="main.png")
+                return embed, fallback_file
+            except Exception as file_error:
+                logger.error(f"Failed to load fallback file: {file_error}")
+                return embed, None
 
     # Legacy compatibility methods (unchanged)
     @staticmethod
